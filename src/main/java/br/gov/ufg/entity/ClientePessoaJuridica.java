@@ -1,11 +1,13 @@
 package br.gov.ufg.entity;
 
-public class ClientePessoaJurídica extends Cliente{
+import java.io.Serializable;
+
+public class ClientePessoaJuridica extends Cliente implements Serializable{
     private String cnpj;
     private String razaoSocial;
     private String inscricaoEstadual;
 
-    public ClientePessoaJurídica(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password, String cnpj, String razaoSocial, String inscricaoEstadual) {
+    public ClientePessoaJuridica(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password, String cnpj, String razaoSocial, String inscricaoEstadual) {
         super(idCliente, nome, email, endereço, telefone, userName, password);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
