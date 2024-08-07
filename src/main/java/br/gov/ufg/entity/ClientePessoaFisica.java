@@ -1,12 +1,13 @@
 package br.gov.ufg.entity;
 import java.util.Date;
+import java.io.Serializable;
 
-public class ClientePessoaFísica extends Cliente{
+public class ClientePessoaFisica extends Cliente implements Serializable{
     private String cpf;
     private String rg;
     private Date dataNascimento;
 
-    public ClientePessoaFísica(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password, String cpf, Date dataNascimento, String rg) {
+    public ClientePessoaFisica(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password, String cpf, Date dataNascimento, String rg) {
         super(idCliente, nome, email, endereço, telefone, userName, password);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
