@@ -1,6 +1,8 @@
 package br.gov.ufg.entity;
 
-public abstract class Cliente {
+import java.io.Serializable;
+
+public abstract class Cliente implements Serializable{
     private int idCliente;
     private String nome;
     private String email;
