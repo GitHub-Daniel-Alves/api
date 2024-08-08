@@ -1,32 +1,33 @@
 package br.gov.ufg.entity;
 
-import java.io.Serializable;
-
-public abstract class Cliente implements Serializable{
-    private int idCliente;
+public abstract class Cliente {
+    // atributos
+    private int IdCliente;
     private String nome;
     private String email;
-    private String endereço;
+    private String endereco;
     private String telefone;
     private String userName;
     private String password;
 
-    public Cliente(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password) {
-        this.idCliente = idCliente;
+    // construtor
+    public Cliente(int IdCliente, String nome, String email, String endereco, String telefone, String userName, String password) {
+        this.IdCliente = IdCliente;
         this.nome = nome;
         this.email = email;
-        this.endereço = endereço;
+        this.endereco = endereco;
         this.telefone = telefone;
         this.userName = userName;
         this.password = password;
     }
 
+    // getters e setters
     public int getIdCliente() {
-        return idCliente;
+        return IdCliente;
     }
 
     public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+        IdCliente = idCliente;
     }
 
     public String getNome() {
@@ -45,12 +46,12 @@ public abstract class Cliente implements Serializable{
         this.email = email;
     }
 
-    public String getEndereço() {
-        return endereço;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public String getTelefone() {
@@ -77,7 +78,13 @@ public abstract class Cliente implements Serializable{
         this.password = password;
     }
 
-    public abstract boolean login(String userName, String password);
+    public void atualizaDados(Cliente clienteAtt) {
+        this.nome = clienteAtt.getNome();
+        this.email = clienteAtt.getEmail();
+        this.endereco = clienteAtt.getEndereco();
+        this.telefone = clienteAtt.getTelefone();
+        this.userName = clienteAtt.getUserName();
+        this.password = clienteAtt.getPassword();
+    }
 
-    public abstract void atualizaDados(Cliente cliente);
 }

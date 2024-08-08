@@ -6,7 +6,7 @@ public class Pedido {
     private Date dataPedido;
     private String status;
 
-    public Pedido(int idPedido, Date dataPedido, String status) {
+    public Pedido(int idPedido, Date dataPedido, String status, int i) {
         this.idPedido = idPedido;
         this.dataPedido = dataPedido;
         this.status = status;
