@@ -4,7 +4,7 @@ public class ClientePessoaJuridicaDTO {
     private int idCliente;
     private String nome;
     private String email;
-    private String endereço;
+    private String endereco;
     private String telefone;
     private String userName;
     private String password;
@@ -15,11 +15,11 @@ public class ClientePessoaJuridicaDTO {
     public ClientePessoaJuridicaDTO() {
     }
 
-    public ClientePessoaJuridicaDTO(int idCliente, String nome, String email, String endereço, String telefone, String userName, String password, String cnpj, String razaoSocial, String inscricaoEstadual) {
+    public ClientePessoaJuridicaDTO(int idCliente, String nome, String email, String endereco, String telefone, String userName, String password, String cnpj, String razaoSocial, String inscricaoEstadual) {
         this.idCliente = idCliente;
         this.nome = nome;
         this.email = email;
-        this.endereço = endereço;
+        this.endereco = endereco;
         this.telefone = telefone;
         this.userName = userName;
         this.password = password;
@@ -54,12 +54,12 @@ public class ClientePessoaJuridicaDTO {
         this.email = email;
     }
 
-    public String getEndereço() {
-        return endereço;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public String getTelefone() {

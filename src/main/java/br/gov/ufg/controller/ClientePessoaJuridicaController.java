@@ -1,104 +1,77 @@
 package br.gov.ufg.controller;
 
 import br.gov.ufg.dto.ClientePessoaJuridicaDTO;
-import br.gov.ufg.entity.ClientePessoaJurídica;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/clientes/pessoajuridica")
+@RequestMapping("/api/clientes-pessoa-juridica")
 public class ClientePessoaJuridicaController {
-    private List<ClientePessoaJurídica> clientes = new ArrayList<>();
 
-    @GetMapping
-    public ResponseEntity<List<ClientePessoaJuridicaDTO>> getAllClientes() {
-        List<ClientePessoaJuridicaDTO> clienteDTOs = new ArrayList<>();
-        for (ClientePessoaJurídica cliente : clientes) {
-            clienteDTOs.add(convertToDto(cliente));
-        }
-        return new ResponseEntity<>(clienteDTOs, HttpStatus.OK);
+    private List<ClientePessoaJuridicaDTO> clientePessoaJuridicaList = new ArrayList<>();
+    private int idCounter = 1;
+
+    @PostMapping
+    public ResponseEntity<ClientePessoaJuridicaDTO> createClientePessoaJuridica(@RequestBody ClientePessoaJuridicaDTO clientePessoaJuridicaDTO) {
+        clientePessoaJuridicaDTO.setIdCliente(idCounter++);
+        clientePessoaJuridicaList.add(clientePessoaJuridicaDTO);
+        return new ResponseEntity<>(clientePessoaJuridicaDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientePessoaJuridicaDTO> getClienteById(@PathVariable int id) {
-        for (ClientePessoaJurídica cliente : clientes) {
-            if (cliente.getIdCliente() == id) {
-                return new ResponseEntity<>(convertToDto(cliente), HttpStatus.OK);
-            }
+    public ResponseEntity<ClientePessoaJuridicaDTO> getClientePessoaJuridicaById(@PathVariable int id) {
+        ClientePessoaJuridicaDTO cliente = clientePessoaJuridicaList.stream()
+                .filter(c -> c.getIdCliente() == id)
+                .findFirst()
+                .orElse(null);
+        if (cliente != null) {
+            return new ResponseEntity<>(cliente, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
-    public ResponseEntity<ClientePessoaJuridicaDTO> createCliente(@RequestBody ClientePessoaJuridicaDTO clienteDTO) {
-        ClientePessoaJurídica cliente = convertToEntity(clienteDTO);
-        clientes.add(cliente);
-        return new ResponseEntity<>(convertToDto(cliente), HttpStatus.CREATED);
+    @GetMapping
+    public ResponseEntity<List<ClientePessoaJuridicaDTO>> getAllClientesPessoaJuridica() {
+        return new ResponseEntity<>(clientePessoaJuridicaList, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientePessoaJuridicaDTO> updateCliente(@PathVariable int id, @RequestBody ClientePessoaJuridicaDTO updatedClienteDTO) {
-        for (ClientePessoaJurídica cliente : clientes) {
-            if (cliente.getIdCliente() == id) {
-                cliente.setNome(updatedClienteDTO.getNome());
-                cliente.setEmail(updatedClienteDTO.getEmail());
-                cliente.setEndereço(updatedClienteDTO.getEndereço());
-                cliente.setTelefone(updatedClienteDTO.getTelefone());
-                cliente.setUserName(updatedClienteDTO.getUserName());
-                cliente.setPassword(updatedClienteDTO.getPassword());
-                cliente.setCnpj(updatedClienteDTO.getCnpj());
-                cliente.setRazaoSocial(updatedClienteDTO.getRazaoSocial());
-                cliente.setInscricaoEstadual(updatedClienteDTO.getInscricaoEstadual());
-                cliente.atualizaDados(cliente);
-                return new ResponseEntity<>(convertToDto(cliente), HttpStatus.OK);
-            }
+    public ResponseEntity<ClientePessoaJuridicaDTO> updateClientePessoaJuridica(@PathVariable int id, @RequestBody ClientePessoaJuridicaDTO clientePessoaJuridicaDTO) {
+        Optional<ClientePessoaJuridicaDTO> existingClienteOpt = clientePessoaJuridicaList.stream()
+                .filter(cliente -> cliente.getIdCliente() == id)
+                .findFirst();
+
+        if (existingClienteOpt.isPresent()) {
+            ClientePessoaJuridicaDTO existingCliente = existingClienteOpt.get();
+            existingCliente.setNome(clientePessoaJuridicaDTO.getNome());
+            existingCliente.setEmail(clientePessoaJuridicaDTO.getEmail());
+            existingCliente.setEndereco(clientePessoaJuridicaDTO.getEndereco());
+            existingCliente.setTelefone(clientePessoaJuridicaDTO.getTelefone());
+            existingCliente.setUserName(clientePessoaJuridicaDTO.getUserName());
+            existingCliente.setPassword(clientePessoaJuridicaDTO.getPassword());
+            existingCliente.setCnpj(clientePessoaJuridicaDTO.getCnpj());
+            existingCliente.setRazaoSocial(clientePessoaJuridicaDTO.getRazaoSocial());
+            existingCliente.setInscricaoEstadual(clientePessoaJuridicaDTO.getInscricaoEstadual());
+
+            return new ResponseEntity<>(existingCliente, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable int id) {
-        for (ClientePessoaJurídica cliente : clientes) {
-            if (cliente.getIdCliente() == id) {
-                clientes.remove(cliente);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+    public ResponseEntity<Void> deleteClientePessoaJuridica(@PathVariable int id) {
+        boolean isRemoved = clientePessoaJuridicaList.removeIf(cliente -> cliente.getIdCliente() == id);
+        if (isRemoved) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody ClientePessoaJuridicaDTO clienteDTO) {
-        for (ClientePessoaJurídica storedCliente : clientes) {
-            if (storedCliente.getUserName().equals(clienteDTO.getUserName())
-                    && storedCliente.getPassword().equals(clienteDTO.getPassword())) {
-                return new ResponseEntity<>(true, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/validarCNPJ")
-    public ResponseEntity<Boolean> validarCNPJ(@RequestBody String cnpj) {
-        for (ClientePessoaJurídica cliente : clientes) {
-            if (cliente.validarCNPJ(cnpj)) {
-                return new ResponseEntity<>(true, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-    }
-
-    private ClientePessoaJuridicaDTO convertToDto(ClientePessoaJurídica cliente) {
-        return new ClientePessoaJuridicaDTO(cliente.getIdCliente(), cliente.getNome(), cliente.getEmail(), cliente.getEndereço(),
-                cliente.getTelefone(), cliente.getUserName(), cliente.getPassword(), cliente.getCnpj(), cliente.getRazaoSocial(), cliente.getInscricaoEstadual());
-    }
-
-    private ClientePessoaJurídica convertToEntity(ClientePessoaJuridicaDTO clienteDTO) {
-        return new ClientePessoaJurídica(clienteDTO.getIdCliente(), clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getEndereço(),
-                clienteDTO.getTelefone(), clienteDTO.getUserName(), clienteDTO.getPassword(), clienteDTO.getCnpj(), clienteDTO.getRazaoSocial(), clienteDTO.getInscricaoEstadual());
     }
 }
