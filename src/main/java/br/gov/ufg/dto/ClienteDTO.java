@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date; // Importação correta
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class ClienteDTO {
                                     cliente[7],                   // senha
                                     cliente[8],                   // cpf
                                     cliente[9],                   // rg
-                                    new Data()                    // data
+                                    (Data) new Date(Long.parseLong(cliente[10])) // data
                             );
                         } else if ("PJ".equals(cliente[0])) {
                             return new ClientePessoaJuridica(
